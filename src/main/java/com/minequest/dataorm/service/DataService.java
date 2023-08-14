@@ -12,6 +12,7 @@ public class DataService<E, ID> {
     private final Provider<E, ID> provider;
 
     public DataService(Class<E> entityClass) {
+        //todo: Instance von DefaultDataCompoundFactory ist halt bullshit. xd
         this(entityClass, DefaultDataCompoundFactory.getInstance().createDataCompound());
     }
 
