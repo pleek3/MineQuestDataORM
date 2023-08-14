@@ -16,8 +16,9 @@ public class MineQuestDataOrm {
     private static ProviderService providerService;
 
     public static ProviderService providerService() {
-        if (providerService == null)
+        if (providerService == null) {
             providerService = new ProviderService();
+        }
         return providerService;
     }
 
@@ -28,8 +29,8 @@ public class MineQuestDataOrm {
     public MineQuestDataOrm(String basePackage) {
         Set<Class<?>> entityClasses = findEntityClasses(basePackage);
 
-        DataCompoundFactory compoundFactory = new DefaultDataCompoundFactory(entityClasses);
-        DataCompound compound = compoundFactory.createDataCompound();
+        DataCompoundFactory compoundFactory = new DefaultDataCompoundFactory();
+        DataCompound compound = compoundFactory.createDataCompound(entityClasses);
 
         try {
             compound.setup();
@@ -41,10 +42,10 @@ public class MineQuestDataOrm {
         DataService<TestEntity, Long> testEntityService = dataServiceRegistry.registerDataService(TestEntity.class);
 
         dataServiceRegistry.registerDataService(TestEntity.class);
-
     }
 
     private Set<Class<?>> findEntityClasses(String basePackage) {
         return ClassUtils.findAllAnnotatedClasses(basePackage, Entity.class);
     }
+
 }

@@ -14,24 +14,15 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class DefaultDataCompoundFactory implements DataCompoundFactory {
 
-    private final Set<Class<?>> entityClasses;
-
-    // Singleton instance
-    private static final DefaultDataCompoundFactory INSTANCE = new DefaultDataCompoundFactory();
-
-    public static DefaultDataCompoundFactory getInstance() {
-        return INSTANCE;
-    }
-
     @Override
-    public DataCompound createDataCompound() {
+    public DataCompound createDataCompound(Set<Class<?>> entityClasses) {
         DataSourceSettings settings = DataSourceSettingsManager.getDataSourceSettings("default");
-        return new DataCompound(settings, this.entityClasses);
+        return new DataCompound(settings, entityClasses);
     }
 
     @Override
-    public DataCompound createCustomDataCompound(String settingsName) {
+    public DataCompound createCustomDataCompound(String settingsName, Set<Class<?>> entityClasses) {
         DataSourceSettings settings = DataSourceSettingsManager.getDataSourceSettings(settingsName);
-        return new DataCompound(settings, this.entityClasses);
+        return new DataCompound(settings, entityClasses);
     }
 }
