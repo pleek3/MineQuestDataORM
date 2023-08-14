@@ -3,7 +3,12 @@ DataORM:
 Datenbank:
   Mehrere EntityManager durch verschiedene Konfigurationen. (Wenn Mines eine andere DB nutzen als MineStats z.B.):
 
-  Repositories sollen wie in Spring erstellt werden -> Ich implementiere bloß die Funktionen & im Hintergrund funktionieren die von alleine
-
 Konfigs:
   Konfigs sollen in der DB gespeichert und als Objekt wieder rausegeben werden können.
+
+
+todo:
+  magic methods:
+  cli(entities erstellen etc):
+  Provider:
+    - QueryBuilder

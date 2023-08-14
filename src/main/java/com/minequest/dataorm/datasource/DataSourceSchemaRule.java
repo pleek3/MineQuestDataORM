@@ -1,4 +1,4 @@
-package com.minequest.dataorm.olrd.api.datasource;
+package com.minequest.dataorm.datasource;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

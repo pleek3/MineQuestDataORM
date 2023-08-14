@@ -1,0 +1,16 @@
+{
+  "serverAddresses": [
+    {
+      "host": "localhost",
+      "port": 5432
+    }
+  ],
+  "db": "test",
+  "user": "user",
+  "password": "",
+  "debug": true,
+  "timings": false,
+  "dataSourceType": "MYSQL",
+  "dataSourceSchemaRule": "CREATE",
+  "numThreads": 4
+}
