@@ -1,4 +1,4 @@
-package framework.listener.model;
+package framework.events.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

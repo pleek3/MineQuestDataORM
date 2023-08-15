@@ -1,11 +1,13 @@
 package framework.core.application;
 
-import framework.entity.EntityClassCollector;
 import framework.core.datacompound.DataCompoundFactory;
 import framework.core.datacompound.DefaultDataCompoundFactory;
-import framework.listener.DefaultEventManager;
-import framework.listener.EventManager;
-import framework.listener.model.StandardEvent;
+import framework.entity.EntityClassCollector;
+import framework.events.DefaultEventManager;
+import framework.events.EventManager;
+import framework.events.model.StandardEvent;
+import framework.registry.ComponentRegistry;
+import framework.registry.DefaultComponentRegistry;
 import framework.service.DataServiceRegistry;
 import lombok.Getter;
 
@@ -22,15 +24,26 @@ public class ConfigurableApplicationContext implements ApplicationContext {
     private EventManager eventManager;
     private String basePackage;
 
+    private ComponentRegistry componentRegistry;
+
     /**
      * Constructs a new ConfigurableApplicationContext with default settings.
      * Initializes the data compound factory, data service registry, entity class collector,
      * and dispatches the AFTER_CONTEXT_INITIALIZED event.
      */
     public ConfigurableApplicationContext() {
-        setBasePackagePath("");
+        setBasePackagePath(".");
+        setComponentRegistry(new DefaultComponentRegistry());
+        getComponentRegistry().scanAndRegisterServices(getBasePackage());
+
+
         setCompoundFactory(new DefaultDataCompoundFactory());
-        setEventManager(new DefaultEventManager());
+        setEventManager(new DefaultEventManager(getComponentRegistry()));
+
+        /*
+        getEventManager().registerEvent("helloWorld");
+        getEventManager().registerListener(clazz);*/
+
         initializeDataServiceRegistry();
         initializeAndCollectEntityClasses();
 
@@ -76,6 +89,11 @@ public class ConfigurableApplicationContext implements ApplicationContext {
      */
     public ConfigurableApplicationContext setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
+        return this;
+    }
+
+    public ConfigurableApplicationContext setComponentRegistry(ComponentRegistry componentRegistry) {
+        this.componentRegistry = componentRegistry;
         return this;
     }
 }

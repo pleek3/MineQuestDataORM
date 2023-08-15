@@ -1,7 +1,7 @@
-package framework.listener;
+package framework.events;
 
-import framework.listener.model.EventListener;
-import framework.listener.model.StandardEvent;
+import framework.events.model.EventListener;
+import framework.events.model.StandardEvent;
 
 /**
  * The EventManager interface provides methods to manage events and event listeners

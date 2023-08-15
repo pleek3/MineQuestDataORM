@@ -1,4 +1,4 @@
-package framework.listener.model;
+package framework.events.model;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface EventListener {
 
-    String eventName();
+    String eventName() default "";
 
     int priority() default 0;
 

@@ -9,7 +9,10 @@ import lombok.experimental.UtilityClass;
 import org.reflections.Reflections;
 
 @UtilityClass
-public class ClassUtils {
+public class TempClassUtils {
+
+    //todo: change class name in service registry
+    //todo: change name
 
     public Set<Class<?>> findAllAnnotatedClasses(String packageToScan, Class<? extends Annotation> annotation) {
         Reflections reflections = new Reflections(packageToScan);

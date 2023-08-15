@@ -1,14 +1,19 @@
-package framework.listener;
+package framework.events;
 
-import framework.listener.model.EventListener;
-import framework.listener.model.EventDetail;
-import framework.listener.model.StandardEvent;
-import framework.util.ClassUtils;
+import framework.annotations.Component;
+import framework.annotations.Service;
+import framework.events.model.EventListener;
+import framework.events.model.EventDetail;
+import framework.events.model.StandardEvent;
+import framework.registry.ComponentRegistry;
+import framework.util.TempClassUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
+@Service
 public class DefaultEventManager implements EventManager {
 
     private final static Class<? extends Annotation> ANNOTATION_CLASS = EventListener.class;
@@ -16,7 +21,14 @@ public class DefaultEventManager implements EventManager {
     private final Map<String, EventDetail> eventDetails = new HashMap<>();
     private boolean standardEventsRegistered = false;
 
-    public DefaultEventManager() {
+    private ComponentRegistry componentRegistry;
+
+    /*
+    todo: Auto Register EventMethods
+     */
+
+    public DefaultEventManager(ComponentRegistry componentRegistry) {
+        this.componentRegistry = componentRegistry;
         registerStandardEvents();
     }
 
@@ -37,13 +49,19 @@ public class DefaultEventManager implements EventManager {
 
     @Override
     public void registerListener(Class<?> clazz) {
-        List<Method> annotatedMethods = ClassUtils.getMethodsAnnotatedWith(clazz, ANNOTATION_CLASS);
+        //todo: Hier draus eine Methode im ServiceRegistry machen
+        if (!clazz.isAnnotationPresent(Service.class) && !clazz.isAnnotationPresent(Component.class)) {
+            throw new RuntimeException("Invalid listener registration for class: " + clazz.getName() +
+                ". Class must be annotated with @Service or @Component.");
+        }
+
+        List<Method> annotatedMethods = TempClassUtils.getMethodsAnnotatedWith(clazz, ANNOTATION_CLASS);
         Map<String, List<Method>> eventToMethodsMap = new HashMap<>();
 
         // Group methods by event name
         for (Method method : annotatedMethods) {
             EventListener listener = method.getAnnotation(EventListener.class);
-            String eventName = listener.value();
+            String eventName = listener.eventName();
             eventToMethodsMap.computeIfAbsent(eventName, k -> new ArrayList<>()).add(method);
         }
 
@@ -57,6 +75,8 @@ public class DefaultEventManager implements EventManager {
 
             List<Method> methodsWithPriority = entry.getValue();
             methodsWithPriority.sort(Comparator.comparingInt(method -> method.getAnnotation(EventListener.class).priority()));
+
+            Collections.reverse(methodsWithPriority);
 
             detail.getEventListener().clear();
             detail.getEventListener().addAll(methodsWithPriority);
@@ -77,7 +97,18 @@ public class DefaultEventManager implements EventManager {
                     throw new RuntimeException("Method with parameters found in event listener: " + listenerMethod.getName());
                 }
 
-                listenerMethod.invoke(null);
+                if (Modifier.isStatic(listenerMethod.getModifiers())) {
+                    listenerMethod.invoke(null);
+                    continue;
+                }
+
+                Object instance = this.componentRegistry.getService(listenerMethod.getDeclaringClass());
+
+                if (instance != null) {
+                    listenerMethod.invoke(instance);
+                } else {
+                    throw new RuntimeException("Instance of class not found for invoking non-static method: " + listenerMethod.getName());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
