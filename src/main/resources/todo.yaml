@@ -8,6 +8,7 @@ Konfigs:
 
 
 todo:
+  Listener (PreStart, PostStart etc.):
   magic methods:
   cli(entities erstellen etc):
   Provider:
