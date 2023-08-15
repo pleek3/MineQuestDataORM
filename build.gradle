@@ -17,28 +17,21 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
     implementation 'org.hibernate.orm:hibernate-core:6.2.7.Final'
-    // https://mvnrepository.com/artifact/org.reflections/reflections
     implementation 'org.reflections:reflections:0.10.2'
-
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
-
-    annotationProcessor 'org.projectlombok:lombok:1.18.28'
-
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
     compileOnly 'org.projectlombok:lombok:1.18.28'
-    implementation name: 'ServiceRegistry'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.minequest.dataorm.MineQuestDataOrm'
+        attributes 'Main-Class': 'framework.core.Application'
     }
 }
 
 shadowJar {
     manifest {
-        attributes 'Main-Class': 'com.minequest.dataorm.MineQuestDataOrm'
-
+        attributes 'Main-Class': 'framework.core.Application'
     }
 }
