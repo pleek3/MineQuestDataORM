@@ -1,6 +1,6 @@
 package framework.entity;
 
-import framework.util.ClassUtils;
+import framework.util.TempClassUtils;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 
@@ -20,7 +20,7 @@ public class EntityClassCollector {
 
     public Set<Class<?>> findEntityClasses(String basePackage) {
         this.entityClasses.clear();
-        this.entityClasses.addAll(ClassUtils.findAllAnnotatedClasses(basePackage, ENTITY_ANNOTATION_CLASS));
+        this.entityClasses.addAll(TempClassUtils.findAllAnnotatedClasses(basePackage, ENTITY_ANNOTATION_CLASS));
         return new HashSet<>(this.entityClasses); // Return a new HashSet to avoid external modification
     }
 
