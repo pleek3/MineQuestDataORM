@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 group 'com.minequest.dataorm'
@@ -26,5 +27,18 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
 
     compileOnly 'org.projectlombok:lombok:1.18.28'
-    compileOnly name: 'ServiceRegistry'
+    implementation name: 'ServiceRegistry'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.minequest.dataorm.MineQuestDataOrm'
+    }
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'com.minequest.dataorm.MineQuestDataOrm'
+
+    }
 }
